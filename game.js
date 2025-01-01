@@ -5,6 +5,8 @@ let money = 500;
 let towers = [];
 let enemies = [];
 let selectedTower = null;
+let gameStarted = false;
+let enemySpeed = 2; // Speed at which the enemies move
 
 // Set canvas size
 canvas.width = 600;
@@ -30,7 +32,7 @@ function drawGrid() {
 
 // Function to handle placing towers
 canvas.addEventListener("click", function(event) {
-    if (!selectedTower || money <= 0) return;
+    if (!selectedTower || money <= 0 || !gameStarted) return;
 
     // Get grid position based on click
     let x = Math.floor(event.offsetX / gridSize) * gridSize;
@@ -69,12 +71,19 @@ towerElements.forEach(towerElement => {
 
 // Function to start the game (spawn enemies, etc.)
 document.getElementById("start").addEventListener("click", function() {
-    startGame();
+    if (!gameStarted) {
+        gameStarted = true;
+        startGame();
+    }
 });
 
 // Example: Spawn enemies and move them
 function startGame() {
-    let enemy = { x: 0, y: Math.floor(Math.random() * (canvas.height / gridSize)) * gridSize };
+    let enemy = { 
+        x: 0, 
+        y: Math.floor(Math.random() * (canvas.height / gridSize)) * gridSize,
+        direction: 1  // Move right initially
+    };
     enemies.push(enemy);
     spawnEnemies();
 }
@@ -82,12 +91,19 @@ function startGame() {
 // Spawn enemies randomly and move them along the path
 function spawnEnemies() {
     let interval = setInterval(function() {
+        if (!gameStarted) {
+            clearInterval(interval);
+            return;
+        }
+        
+        // Update enemy positions
         enemies.forEach(enemy => {
-            enemy.x += gridSize;
-            // Remove enemy if it reaches the end
+            enemy.x += enemySpeed;
+
+            // Check for enemies reaching the end (right side of the screen)
             if (enemy.x > canvas.width) {
-                enemies = enemies.filter(e => e !== enemy);
-                money += 100; // Reward for killing an enemy
+                enemies = enemies.filter(e => e !== enemy);  // Remove the enemy
+                money += 100;  // Reward for killing an enemy
                 updateMoneyDisplay();
             }
         });
@@ -97,7 +113,7 @@ function spawnEnemies() {
         drawGrid();
         drawTowers();
         drawEnemies();
-    }, 1000);
+    }, 100);
 }
 
 // Draw enemies on the grid
