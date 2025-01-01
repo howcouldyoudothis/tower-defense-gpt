@@ -105,8 +105,9 @@ function spawnEnemies() {
 
             // Check for enemies reaching the end (right side of the screen)
             if (enemy.x > canvas.width) {
-                enemies = enemies.filter(e => e !== enemy);  // Remove the enemy
-                money += 100;  // Reward for killing an enemy
+                // Remove the enemy and decrease money
+                enemies = enemies.filter(e => e !== enemy);
+                money -= 100;  // Lose money for allowing the enemy to escape
                 updateMoneyDisplay();
             }
         });
