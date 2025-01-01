@@ -66,6 +66,7 @@ let towerElements = document.querySelectorAll(".tower");
 towerElements.forEach(towerElement => {
     towerElement.addEventListener("click", function() {
         selectedTower = this.dataset.tower;
+        console.log(`Selected Tower: ${selectedTower}`);
     });
 });
 
@@ -73,6 +74,7 @@ towerElements.forEach(towerElement => {
 document.getElementById("start").addEventListener("click", function() {
     if (!gameStarted) {
         gameStarted = true;
+        console.log("Game started");
         startGame();
     }
 });
@@ -95,7 +97,7 @@ function spawnEnemies() {
             clearInterval(interval);
             return;
         }
-        
+
         // Update enemy positions
         enemies.forEach(enemy => {
             enemy.x += enemySpeed;
