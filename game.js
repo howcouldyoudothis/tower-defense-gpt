@@ -70,24 +70,25 @@ towerElements.forEach(towerElement => {
     });
 });
 
-// Function to start the game (spawn enemies, etc.)
-document.getElementById("start").addEventListener("click", function() {
-    if (!gameStarted) {
-        gameStarted = true;
-        console.log("Game started");
-        startGame();
-    }
-});
+// Function to start the game automatically as soon as the page loads
+window.onload = function() {
+    gameStarted = true;  // Automatically start the game
+    console.log("Game started automatically");
+    startGame();
+}
 
 // Example: Spawn enemies and move them
 function startGame() {
-    let enemy = { 
-        x: 0, 
-        y: Math.floor(Math.random() * (canvas.height / gridSize)) * gridSize,
-        direction: 1  // Move right initially
-    };
-    enemies.push(enemy);
-    spawnEnemies();
+    // Automatically spawn enemies at intervals
+    setInterval(function() {
+        let enemy = { 
+            x: 0, 
+            y: Math.floor(Math.random() * (canvas.height / gridSize)) * gridSize,
+            direction: 1  // Move right initially
+        };
+        enemies.push(enemy);
+        spawnEnemies();
+    }, 2000);  // Every 2 seconds, spawn a new enemy
 }
 
 // Spawn enemies randomly and move them along the path
